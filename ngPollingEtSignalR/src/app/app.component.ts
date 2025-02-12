@@ -1,13 +1,18 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
+import { RouterOutlet } from '@angular/router';
+import { MatTab, MatTabGroup} from '@angular/material/tabs'
+import { MatToolbar } from '@angular/material/toolbar';
+import { PollingComponent } from './polling/polling.component';
+import { SignalrComponent } from './signalr/signalr.component';
+
 
 @Component({
   selector: 'app-root',
+  standalone: true,
+  imports: [RouterOutlet,MatTab,MatTabGroup,MatToolbar,PollingComponent,SignalrComponent],
   templateUrl: './app.component.html',
-  styleUrls: ['./app.component.css']
+  styleUrl: './app.component.css'
 })
-export class AppComponent implements OnInit {
-
-  ngOnInit(): void {
-  }
-
+export class AppComponent {
+  title = 'ngPollingEtSignalR';
 }

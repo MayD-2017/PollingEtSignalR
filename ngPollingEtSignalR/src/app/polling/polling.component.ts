@@ -1,20 +1,29 @@
 import { Component, OnInit } from '@angular/core';
 import { UselessTask } from '../models/UselessTask';
 import { HttpClient } from '@angular/common/http';
+import { MatCard, MatCardContent } from '@angular/material/card';
+import { MatCheckbox } from '@angular/material/checkbox';
+import { MatFormField, MatInput, MatInputModule, MatLabel } from '@angular/material/input';
+import { FormsModule } from '@angular/forms';
+import { CommonModule } from '@angular/common';
+import { MatButtonModule } from '@angular/material/button';
 import { lastValueFrom } from 'rxjs';
+
 
 @Component({
   selector: 'app-polling',
+  standalone: true,
+  imports: [MatCheckbox,MatCardContent,MatCard,MatFormField,FormsModule,MatLabel,CommonModule,MatInput,MatButtonModule],
   templateUrl: './polling.component.html',
   styleUrls: ['./polling.component.css']
 })
 export class PollingComponent implements OnInit {
-
   apiUrl = "https://localhost:7289/api/";
+  title = 'labo.signalr.ng';
   tasks: UselessTask[] = [];
   taskname: string = "";
 
-  constructor(private http: HttpClient){}
+  constructor(private http:HttpClient){}
 
   ngOnInit(): void {
     this.updateTasks();
@@ -27,11 +36,15 @@ export class PollingComponent implements OnInit {
 
   async addtask() {
     // TODO On invoke la méthode pour ajouter une tâche sur le serveur (Contrôleur d'API)
+
     this.tasks.push(await lastValueFrom(this.http.post<UselessTask>(this.apiUrl+'UselessTasks/Add?taskText=' + this.taskname, null)));
+
+    console.log(this.tasks);
   }
 
   async updateTasks() {
-    // TODO Utiliser le polling pour non seulement mettre la liste de tasks à jour, mais continuer de le faire chaque seconde
+    // TODO: Faire une première implémentation simple avec un appel au serveur pour obtenir la liste des tâches
+    // TODO: UNE FOIS QUE VOUS AVEZ TESTER AVEC DEUX CLIENTS: Utiliser le polling pour mettre la liste de tasks à jour chaque seconde
     this.tasks = await lastValueFrom(this.http.get<UselessTask[]>(this.apiUrl+'UselessTasks/GetAll'));
 
     setTimeout(() => this.updateTasks(), 1000);
